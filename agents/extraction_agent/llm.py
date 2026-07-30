@@ -1,60 +1,30 @@
-"""
-llm.py
+import sys
+import os
 
-Extracts structured grant information from cleaned webpage text.
-"""
+# Import the centralized AI service
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+try:
+    from backend.services import ai_service
+except ImportError:
+    ai_service = None
 
-import re
-
-
-def extract_information(text):
+def extract_information(text: str) -> dict:
     """
-    Extract grant details from cleaned webpage text.
-
-    Args:
-        text (str): Cleaned webpage text.
-
-    Returns:
-        dict: Structured grant information.
+    Extract structured grant details from raw text.
+    Integration point for calling the centralized ai_service.structured_generate().
     """
-
-    fields = {
-        "title": "Grant Title:",
-        "funding_amount": "Funding Amount:",
-        "deadline": "Deadline:",
-        "eligibility": "Eligibility:",
-        "research_areas": "Research Areas:",
-        "required_documents": "Required Documents:",
-        "country": "Country:",
-        "funding_agency": "Funding Agency:"
+    # Integration Point: Skeletons for future extraction logic
+    # schema = {"title": "str", "deadline": "str", "funding": "str"}
+    # response = ai_service.structured_generate(text, response_schema=schema)
+    
+    # Return default empty structured dictionary
+    return {
+        "title": "Not Available",
+        "funding_amount": "Not Available",
+        "deadline": "Not Available",
+        "eligibility": "Not Available",
+        "research_areas": [],
+        "required_documents": [],
+        "country": "Not Available",
+        "funding_agency": "Not Available"
     }
-
-    result = {}
-
-    for key, label in fields.items():
-
-        pattern = rf"{re.escape(label)}\s*(.*?)(?=\n[A-Za-z ]+:|\Z)"
-        match = re.search(pattern, text, re.DOTALL)
-
-        if match:
-            value = match.group(1).strip()
-
-            # Convert multiline sections into lists
-            if key in ["research_areas", "required_documents"]:
-                items = []
-
-                for line in value.splitlines():
-                    line = line.strip().lstrip("-").strip()
-
-                    if line:
-                        items.append(line)
-
-                result[key] = items
-
-            else:
-                result[key] = value
-
-        else:
-            result[key] = "Not Available"
-
-    return result

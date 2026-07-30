@@ -5,8 +5,16 @@ Generates a research preparation plan based on the matched grant.
 """
 
 from datetime import datetime
-from typing import Dict
-from typing import Tuple
+from typing import Dict, Tuple
+import sys
+import os
+
+# Add parent directory to path to allow import of shared package
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+try:
+    from backend.services import ai_service
+except ImportError:
+    ai_service = None
 
 def estimate_preparation_time(grant: Dict) -> int:
     """
@@ -49,10 +57,12 @@ def calculate_urgency(deadline: str) -> Tuple[str, int]:
         (urgency, days_left)
     """
 
-    deadline_date = datetime.strptime(deadline, "%Y-%m-%d").date()
-    today = datetime.today().date()
-
-    days_left = (deadline_date - today).days
+    try:
+        deadline_date = datetime.strptime(deadline, "%Y-%m-%d").date()
+        today = datetime.today().date()
+        days_left = (deadline_date - today).days
+    except (ValueError, KeyError, TypeError):
+        return "Medium", 30
 
     if days_left < 0:
         return "Expired", days_left
@@ -94,12 +104,42 @@ def generate_plan(grant: Dict) -> Dict:
 
     urgency, days_left = calculate_urgency(grant["deadline"])
 
-    action = recommend_action(
-    grant["priority_score"],
-    urgency,
-    estimated_days,
-    days_left,
-)
+    # Default action using rule-based recommendation
+    default_action = recommend_action(
+        grant.get("priority_score", 50),
+        urgency,
+        estimated_days,
+        days_left,
+    )
+
+    if not ai_service:
+        action = default_action
+    else:
+        messages = [
+            {
+                "role": "system",
+                "content": (
+                    "You are an expert grant timeline strategist. Recommend the single best immediate action a researcher should take. "
+                    "Keep the recommendation concise (1-2 sentences maximum), direct, and highly actionable. "
+                    "Make it fit the urgency, number of days left, and priority."
+                )
+            },
+            {
+                "role": "user",
+                "content": (
+                    f"Grant Title: {grant.get('title')}\n"
+                    f"Priority Score: {grant.get('priority_score', 50)}/100\n"
+                    f"Urgency Level: {urgency}\n"
+                    f"Days Remaining: {days_left}\n"
+                    f"Estimated Days Required for Preparation: {estimated_days}\n"
+                    f"Required Documents: {', '.join(grant.get('required_documents', []))}"
+                )
+            }
+        ]
+        response_text = ai_service.chat(
+            messages=messages
+        )
+        action = response_text.strip() if response_text else default_action
 
     return {
         "estimated_days": estimated_days,

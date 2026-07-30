@@ -1,5 +1,15 @@
 from datetime import datetime
 import re
+import sys
+import os
+import json
+
+# Add parent directory to path to allow import of shared package
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+try:
+    from backend.services import ai_service
+except ImportError:
+    ai_service = None
 
 
 def calculate_match_score(similarity: float) -> int:
@@ -29,8 +39,11 @@ def calculate_priority_score(
     """
 
     # ---------- Deadline ----------
-    deadline_date = datetime.strptime(grant["deadline"], "%Y-%m-%d")
-    days_left = (deadline_date - datetime.today()).days
+    try:
+        deadline_date = datetime.strptime(grant["deadline"], "%Y-%m-%d")
+        days_left = (deadline_date - datetime.today()).days
+    except (ValueError, KeyError, TypeError):
+        days_left = 30
 
     if days_left <= 7:
         deadline_score = 100
@@ -51,7 +64,10 @@ def calculate_priority_score(
     )
 
     # ---------- Funding ----------
-    amount = int(re.sub(r"[^\d]", "", grant["funding"]))
+    try:
+        amount = int(re.sub(r"[^\d]", "", grant["funding"]))
+    except (ValueError, KeyError, TypeError):
+        amount = 0
 
     if amount >= 200000:
         funding_score = 100
@@ -80,40 +96,86 @@ def explain_match(profile: dict, grant: dict, days_left: int) -> list[str]:
     Generate human-readable explanations for why a grant matches.
     """
 
-    reasons = []
-
-    profile_areas = set(profile.get("research_areas", []))
-    grant_areas = set(grant.get("research_areas", []))
-
-    common = profile_areas.intersection(grant_areas)
-
-    if common:
+    # Static fallback logic
+    def static_fallback():
+        reasons = []
+        profile_areas = set(profile.get("research_areas", []))
+        grant_areas = set(grant.get("research_areas", []))
+        common = profile_areas.intersection(grant_areas)
+        if common:
+            reasons.append(
+                "Strong overlap in research areas: "
+                + ", ".join(sorted(common))
+            )
+        else:
+            reasons.append(
+                "No direct research area overlap. Recommendation based on semantic similarity."
+            )
+        if grant["country"] in profile.get("preferred_countries", []):
+            reasons.append(
+                f"Available in your preferred funding region ({grant['country']})."
+            )
         reasons.append(
-            "Strong overlap in research areas: "
-            + ", ".join(sorted(common))
+            f"Grant offers funding of {grant['funding']}."
         )
-    else:
-        reasons.append(
-            "No direct research area overlap. Recommendation based on semantic similarity."
-        )
+        if days_left <= 7:
+            reasons.append("Deadline is within one week. Apply soon!")
+        elif days_left <= 30:
+            reasons.append(f"Application closes in {days_left} days.")
+        else:
+            reasons.append(f"Deadline is in {days_left} days.")
+        return reasons
 
-    if grant["country"] in profile.get("preferred_countries", []):
-        reasons.append(
-            f"Available in your preferred funding region ({grant['country']})."
-        )
+    fallback_reasons = static_fallback()
 
-    reasons.append(
-        f"Grant offers funding of {grant['funding']}."
+    if not ai_service:
+        return fallback_reasons
+
+    # Construct Grok prompt for personalized matching explanations
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are an expert academic advisor. Your job is to explain why a specific research grant matches a researcher's profile. "
+                "Provide exactly 3 to 4 clear, professional reasons, formatted as a bulleted list of separate sentences. "
+                "Do NOT include markdown bullet points, symbols (like '-', '*', '•'), numbering, or bold headers. Just output the clean text lines. "
+                "Make the reasons tailored to the researcher's background, skills, and the grant's specifics."
+            )
+        },
+        {
+            "role": "user",
+            "content": (
+                f"Researcher Profile:\n"
+                f"- Research Areas: {', '.join(profile.get('research_areas', []))}\n"
+                f"- Skills: {', '.join(profile.get('skills', []))}\n"
+                f"- Publications: {', '.join(profile.get('publications', []))}\n"
+                f"- Career Stage: {profile.get('career_stage', 'Unknown')}\n\n"
+                f"Grant Details:\n"
+                f"- Title: {grant.get('title')}\n"
+                f"- Agency: {grant.get('agency')}\n"
+                f"- Country: {grant.get('country')}\n"
+                f"- Funding: {grant.get('funding')}\n"
+                f"- Deadline: {grant.get('deadline')} ({days_left} days remaining)\n"
+                f"- Research Areas: {', '.join(grant.get('research_areas', []))}"
+            )
+        }
+    ]
+
+    response_text = ai_service.chat(
+        messages=messages
     )
 
-    if days_left <= 7:
-        reasons.append("Deadline is within one week. Apply soon!")
-    elif days_left <= 30:
-        reasons.append(f"Application closes in {days_left} days.")
-    else:
-        reasons.append(f"Deadline is in {days_left} days.")
+    if not response_text:
+        return fallback_reasons
 
-    return reasons
+    # Parse and clean output lines
+    lines = []
+    for line in response_text.splitlines():
+        line = line.strip().lstrip("-").lstrip("*").lstrip("•").lstrip("1234567890.").strip()
+        if line:
+            lines.append(line)
+
+    return lines if len(lines) >= 2 else fallback_reasons
 
 
 def recommend_action(priority_score: int, days_left: int) -> str:
