@@ -7,11 +7,13 @@ import os
 # Ensure backend directory is in search path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from routes.ai import router as ai_router
-from routes.grants import router as grants_router
-from routes.researchers import router as researchers_router
-from routes.matches import router as matches_router
-from routes.notifications import router as notifications_router
+from routes import (
+    ai_router,
+    grants_router,
+    researchers_router,
+    matches_router,
+    notifications_router,
+)
 
 app = FastAPI(
     title="AI Grant Opportunity Hunter Backend",
@@ -22,7 +24,7 @@ app = FastAPI(
 # CORS middleware for frontend communication
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
