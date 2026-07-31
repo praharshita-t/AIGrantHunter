@@ -4,8 +4,8 @@ monitor.py
 Monitors grant websites and detects new grants.
 """
 
-from scraper import scrape_website
-from website_configs import WEBSITES
+from .scraper import scrape_website
+from .website_configs import WEBSITES
 
 
 def monitor_websites():

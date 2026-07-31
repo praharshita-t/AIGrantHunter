@@ -4,7 +4,7 @@ scheduler.py
 Simple scheduler for the Grant Discovery Agent.
 """
 
-from monitor import monitor_websites
+from .monitor import monitor_websites
 
 
 def run_scheduler():

@@ -1,12 +1,8 @@
 import json
 import re
-import sys
-import os
 from typing import List, Dict, Any, Optional
 
-# Add current folder to path to allow neighbor imports
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from grok_client import execute_chat_completion
+from .featherless_client import execute_chat_completion
 
 def chat(messages: List[Dict[str, str]], temperature: float = 0.2) -> Optional[str]:
     """

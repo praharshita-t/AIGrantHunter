@@ -4,10 +4,10 @@ service.py
 Main entry point for the Planning Agent.
 """
 
-from checklist import generate_checklist
-from planner import generate_plan
-from notifier import create_notification
-from email_generator import generate_email
+from .checklist import generate_checklist
+from .planner import generate_plan
+from .notifier import create_notification
+from .email_generator import generate_email
 
 
 def run_planning_agent(grant: dict) -> dict:

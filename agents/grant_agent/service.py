@@ -4,7 +4,7 @@ service.py
 Public entry point for the Grant Discovery Agent.
 """
 
-from scheduler import run_scheduler
+from .scheduler import run_scheduler
 
 
 def run_grant_discovery():
