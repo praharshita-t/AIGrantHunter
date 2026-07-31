@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Dr. Shaun Angel",
+    "institution": "VIT-AP University",
+    "career_stage": "Undergraduate Researcher",
+    "research_areas": ["Artificial Intelligence", "Machine Learning", "Healthcare"],
+    "skills": ["Python", "Deep Learning", "Computer Vision", "NLP"],
+    "publications": ["AI-based Disease Prediction", "Medical Image Segmentation using CNNs"],
+    "preferred_countries": ["India", "European Union"],
+    "email": "shaun@vitap.ac.in"
+  },
+  {
+    "name": "Dr. Priya Sharma",
+    "institution": "IIT Madras",
+    "career_stage": "Postdoctoral Researcher",
+    "research_areas": ["Artificial Intelligence", "Healthcare", "Bioinformatics"],
+    "skills": ["Python", "Deep Learning", "TensorFlow", "Data Analysis"],
+    "publications": ["AI-driven Drug Discovery", "Deep Learning for Genomics"],
+    "preferred_countries": ["India", "USA", "European Union"],
+    "email": "priya@iitm.ac.in"
+  },
+  {
+    "name": "Dr. James Chen",
+    "institution": "University of Cambridge",
+    "career_stage": "Associate Professor",
+    "research_areas": ["Quantum Computing", "Physics", "Computer Science"],
+    "skills": ["Qiskit", "Python", "Linear Algebra", "Quantum Algorithms"],
+    "publications": ["Quantum Error Correction Advances", "Hybrid Quantum-Classical Systems"],
+    "preferred_countries": ["United Kingdom", "European Union", "USA"],
+    "email": "jchen@cam.ac.uk"
+  }
+]

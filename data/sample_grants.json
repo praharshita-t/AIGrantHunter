@@ -1,0 +1,57 @@
+[
+  {
+    "title": "AI for Healthcare",
+    "agency": "NSF",
+    "country": "USA",
+    "funding": "$100,000",
+    "deadline": "2026-09-30",
+    "research_areas": ["Artificial Intelligence", "Healthcare", "Medical Imaging"],
+    "required_documents": ["Proposal", "Budget", "CV"],
+    "description": "This grant supports innovative research in AI for healthcare applications.",
+    "source_url": "https://www.nsf.gov/grants/ai-healthcare"
+  },
+  {
+    "title": "Smart Agriculture using AI",
+    "agency": "ANRF",
+    "country": "India",
+    "funding": "₹75,00,000",
+    "deadline": "2026-10-15",
+    "research_areas": ["Agriculture", "Artificial Intelligence", "IoT"],
+    "required_documents": ["Proposal", "Budget", "Institutional Letter"],
+    "description": "Funding for AI-driven solutions to improve agricultural productivity in India.",
+    "source_url": "https://anrfonline.in/grants/smart-agriculture"
+  },
+  {
+    "title": "Medical Imaging Research",
+    "agency": "Horizon Europe",
+    "country": "European Union",
+    "funding": "€200,000",
+    "deadline": "2026-11-10",
+    "research_areas": ["Medical Imaging", "Machine Learning", "Healthcare"],
+    "required_documents": ["Proposal", "Budget", "CV", "Ethics Statement"],
+    "description": "Supporting breakthrough research in medical imaging using machine learning.",
+    "source_url": "https://ec.europa.eu/horizon/medical-imaging"
+  },
+  {
+    "title": "Quantum Computing Foundations",
+    "agency": "ANRF",
+    "country": "India",
+    "funding": "₹1,00,00,000",
+    "deadline": "2026-12-01",
+    "research_areas": ["Quantum Computing", "Physics", "Computer Science"],
+    "required_documents": ["Proposal", "Budget", "CV", "Lab Equipment List"],
+    "description": "Grant for fundamental and applied research in quantum computing.",
+    "source_url": "https://anrfonline.in/grants/quantum-computing"
+  },
+  {
+    "title": "Cybersecurity and Privacy in AI Systems",
+    "agency": "UKRI",
+    "country": "United Kingdom",
+    "funding": "£150,000",
+    "deadline": "2026-10-30",
+    "research_areas": ["Cybersecurity", "Artificial Intelligence", "Privacy"],
+    "required_documents": ["Proposal", "Budget", "CV"],
+    "description": "Research into securing AI systems and ensuring privacy compliance.",
+    "source_url": "https://www.ukri.org/opportunity/cybersecurity-ai"
+  }
+]
