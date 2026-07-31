@@ -7,6 +7,8 @@ import MissionControl  from './pages/MissionControl.jsx'
 import Recommendations from './pages/Recommendations.jsx'
 import GrantDetails    from './pages/GrantDetails.jsx'
 
+import AppLayout from './components/common/AppLayout.jsx'
+
 // ── Dashboard / app pages (origin/main branch) ───────────────────────────────
 import Dashboard      from './pages/Dashboard.jsx'
 import DiscoverGrants from './pages/DiscoverGrants.jsx'
@@ -26,11 +28,13 @@ export default function App() {
         <Route path="/grant-details"   element={<GrantDetails />} />
 
         {/* Dashboard / app routes */}
-        <Route path="/dashboard"       element={<Dashboard />} />
-        <Route path="/discover"        element={<DiscoverGrants />} />
-        <Route path="/planner"         element={<Planner />} />
-        <Route path="/notifications"   element={<Notifications />} />
-        <Route path="/settings"        element={<Settings />} />
+        <Route element={<AppLayout />}>
+          <Route path="/dashboard"       element={<Dashboard />} />
+          <Route path="/discover"        element={<DiscoverGrants />} />
+          <Route path="/planner"         element={<Planner />} />
+          <Route path="/notifications"   element={<Notifications />} />
+          <Route path="/settings"        element={<Settings />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )

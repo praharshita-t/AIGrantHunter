@@ -89,21 +89,6 @@ export default function Hero() {
           Upload Research Profile
         </button>
       </motion.div>
-
-      {/* Social proof strip */}
-      <motion.div
-        custom={4}
-        initial="hidden"
-        animate="visible"
-        variants={fadeUp}
-        className="mt-16 flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs text-white/30 font-medium"
-      >
-        {['2,400+ grants indexed', 'NIH · NSF · EU Horizon', '94% match accuracy', 'Free to start'].map((item) => (
-          <span key={item} className="flex items-center gap-1.5">
-            <span className="text-brand-500">✦</span> {item}
-          </span>
-        ))}
-      </motion.div>
     </section>
   )
 }

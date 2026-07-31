@@ -153,3 +153,15 @@ def delete_notification(notification_id: int) -> bool:
     before = len(_notifications)
     _notifications = [n for n in _notifications if n["id"] != notification_id]
     return len(_notifications) < before
+
+
+def clear_all_data():
+    global _researchers, _grants, _matches, _notifications
+    _researchers.clear()
+    _grants.clear()
+    _matches.clear()
+    _notifications.clear()
+    _counters["researcher"] = 0
+    _counters["grant"] = 0
+    _counters["match"] = 0
+    _counters["notification"] = 0

@@ -29,26 +29,33 @@ function Navbar() {
 
       {/* Nav links */}
       <nav className="hidden md:flex items-center gap-7 text-xs font-medium text-white/50">
-        {['Features', 'How it works', 'Pricing', 'Docs'].map((item) => (
-          <a
-            key={item}
-            href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
-            className="hover:text-white transition-colors duration-150"
-          >
-            {item}
-          </a>
-        ))}
+        <a href="#" className="hover:text-white transition-colors duration-150">Home</a>
+        <a href="#features" className="hover:text-white transition-colors duration-150">Features</a>
+        <a href="#how-it-works" className="hover:text-white transition-colors duration-150">How It Works</a>
+        <span onClick={() => navigate('/profile')} className="hover:text-white cursor-pointer transition-colors duration-150">Research Profile</span>
+        <span onClick={() => navigate('/mission-control')} className="hover:text-white cursor-pointer transition-colors duration-150">Mission Control</span>
+        <span onClick={() => navigate('/recommendations')} className="hover:text-white cursor-pointer transition-colors duration-150">Recommendations</span>
+        <a
+          href="http://localhost:8000/docs"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-white transition-colors duration-150"
+        >
+          Docs
+        </a>
       </nav>
 
       {/* Right actions */}
       <div className="flex items-center gap-3">
-        <button
-          id="nav-sign-in"
-          onClick={() => navigate('/profile')}
-          className="hidden sm:block text-xs font-medium text-white/50 hover:text-white transition-colors"
+        <a
+          id="nav-github"
+          href="https://github.com/praharshita-t/AIGrantHunter"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hidden sm:block text-xs font-medium text-white/50 hover:text-white transition-colors mr-2"
         >
-          Sign in
-        </button>
+          GitHub
+        </a>
         <button
           id="nav-get-started"
           onClick={() => navigate('/profile')}
@@ -62,6 +69,7 @@ function Navbar() {
 }
 
 // ─── Divider ────────────────────────────────────────────────────────────────
+// Renders visual divider between main landing sections
 function SectionDivider() {
   return (
     <div className="flex items-center justify-center py-2">
@@ -73,14 +81,18 @@ function SectionDivider() {
 // ─── Landing Page ───────────────────────────────────────────────────────────
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-surface-950 text-white font-sans">
+    <div className="min-h-screen bg-surface-950 text-white font-sans scroll-smooth">
       <Navbar />
       <main>
         <Hero />
         <SectionDivider />
-        <WorkflowPreview />
+        <div id="how-it-works">
+          <WorkflowPreview />
+        </div>
         <SectionDivider />
-        <FeatureCards />
+        <div id="features">
+          <FeatureCards />
+        </div>
         <SectionDivider />
         <CTASection />
       </main>

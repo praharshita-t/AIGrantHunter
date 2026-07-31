@@ -19,6 +19,7 @@ const INITIAL = {
   profile: {
     fullName: '', institution: '', country: '',
     department: '', position: '', experience: '',
+    institutionType: '', highestDegree: '',
   },
   interests:      [],
   keywords:       [],
@@ -26,6 +27,19 @@ const INITIAL = {
   publications:   { file: null, scholarUrl: '', orcid: '' },
   fundingTypes:   [],
   fundingRange:   [50000, 500000],
+}
+
+const INTERESTS_MAP = {
+  ai: 'Artificial Intelligence',
+  healthcare: 'Healthcare',
+  cv: 'Computer Vision',
+  cyber: 'Cybersecurity',
+  quantum: 'Quantum Computing',
+  nlp: 'Natural Language Processing',
+  robotics: 'Robotics',
+  climate: 'Climate Science',
+  genomics: 'Genomics',
+  materials: 'Materials Science'
 }
 
 // ─── Section heading ──────────────────────────────────────────────────────────
@@ -53,16 +67,28 @@ export default function ResearchProfile() {
     merge('uploads', { ...form.uploads, [type]: file })
 
   const handleAnalyze = () => {
-    console.group('📊 GrantAI — Research Profile Submitted')
-    console.log('Uploads:',        form.uploads)
-    console.log('Profile:',        form.profile)
-    console.log('Interests:',      form.interests)
-    console.log('Keywords:',       form.keywords)
-    console.log('Previous grants:', form.previousGrants)
-    console.log('Publications:',   form.publications)
-    console.log('Funding types:',  form.fundingTypes)
-    console.log('Funding range:',  form.fundingRange)
-    console.groupEnd()
+    const payload = {
+      name: form.profile.fullName || "Dr. Lalit Prasad",
+      institution: form.profile.institution || "IIT Delhi",
+      career_stage: form.profile.position || form.profile.experience || "Researcher",
+      research_areas: form.interests.length > 0 
+        ? form.interests.map(id => INTERESTS_MAP[id] || id) 
+        : ["Quantum Computing", "Artificial Intelligence"],
+      skills: form.keywords.length > 0 ? form.keywords : ["Quantum Computing", "Artificial Intelligence"],
+      publications: form.publications.scholarUrl ? [form.publications.scholarUrl] : [],
+      preferred_countries: form.profile.country ? [form.profile.country] : [],
+      institution_type: form.profile.institutionType || "University",
+      research_experience: form.profile.experience || "2-5",
+      highest_degree: form.profile.highestDegree || "PhD",
+      funding_history: form.previousGrants || []
+    }
+    localStorage.setItem('pendingProfileAnalysis', JSON.stringify(payload))
+    localStorage.setItem('userProfile', JSON.stringify({
+      ...payload,
+      email: form.profile.email || "lalit.prasad@iitd.ac.in",
+      department: form.profile.department || "Physics",
+      yearsOfExperience: form.profile.experience || "2-5"
+    }))
     navigate('/mission-control')
   }
 
@@ -215,6 +241,7 @@ export default function ResearchProfile() {
             <FundingRangeSlider
               range={form.fundingRange}
               onChange={(val) => merge('fundingRange', val)}
+              country={form.profile.country}
             />
           </motion.div>
 

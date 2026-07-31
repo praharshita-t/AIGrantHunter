@@ -4,8 +4,8 @@ extractor.py
 Coordinates the extraction pipeline.
 """
 
-from parser import parse_text
-from llm import extract_information
+from .parser import parse_text
+from .llm import extract_information
 
 
 def run_extraction(raw_text):

@@ -1,8 +1,16 @@
-import { useState } from 'react';
-import { plannerTasks, plannerColumns } from '@/services/mockData';
+import { useState, useEffect } from 'react';
+import { plannerColumns } from '@/services/mockData';
 
 export function usePlanner() {
-  const [tasks, setTasks] = useState(plannerTasks);
+  const [tasks, setTasks] = useState(() => {
+    const saved = localStorage.getItem('plannerTasks');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('plannerTasks', JSON.stringify(tasks));
+  }, [tasks]);
+
   const [columns] = useState(plannerColumns);
   const [activeView, setActiveView] = useState('kanban'); // 'kanban', 'checklist', 'timeline', 'calendar'
 

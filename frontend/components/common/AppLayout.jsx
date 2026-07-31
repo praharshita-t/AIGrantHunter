@@ -1,22 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Sidebar from '@/components/common/Sidebar';
 import TopNavigation from '@/components/common/TopNavigation';
-import { currentUser, sidebarLinks, notifications } from '@/services/mockData';
+import { sidebarLinks } from '@/services/mockData';
 
 export default function AppLayout() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const [user] = useState(() => {
+    const saved = localStorage.getItem('userProfile');
+    return saved ? JSON.parse(saved) : { name: 'Dr. Lalit Prasad', institution: 'IIT Delhi' };
+  });
+
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    fetch('/api/notifications/')
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setUnreadCount(data.filter((n) => !n.read).length);
+        }
+      })
+      .catch(console.error);
+  }, []);
 
   return (
     <div className="flex h-screen overflow-hidden" style={{ background: 'var(--color-bg-primary)' }}>
       <Sidebar
         links={sidebarLinks}
-        user={currentUser}
+        user={user}
         collapsed={sidebarCollapsed}
         onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
         mobileOpen={mobileMenuOpen}
@@ -25,7 +41,7 @@ export default function AppLayout() {
 
       <div className="flex flex-1 flex-col overflow-hidden">
         <TopNavigation
-          user={currentUser}
+          user={user}
           unreadCount={unreadCount}
           onMobileMenuToggle={() => setMobileMenuOpen(true)}
         />

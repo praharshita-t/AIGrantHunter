@@ -6,6 +6,17 @@ export function cn(...inputs) {
 }
 
 export function formatCurrency(amount) {
+  if (typeof amount === 'string') {
+    if (amount.includes('$') || amount.includes('₹') || amount.includes('£') || amount.includes('Lakh') || amount.includes('M') || amount.includes('K')) {
+      return amount;
+    }
+    const cleanNum = Number(amount.replace(/[^0-9.-]+/g, ''));
+    if (!isNaN(cleanNum)) {
+      amount = cleanNum;
+    } else {
+      return amount;
+    }
+  }
   if (amount >= 1000000) {
     return `$${(amount / 1000000).toFixed(1)}M`;
   }

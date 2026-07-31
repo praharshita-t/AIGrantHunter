@@ -15,6 +15,7 @@ from backend.routes import (
     matches_router,
     notifications_router,
     planning_router,
+    pipeline_router,
 )
 
 app = FastAPI(
@@ -39,6 +40,7 @@ app.include_router(researchers_router)
 app.include_router(matches_router)
 app.include_router(notifications_router)
 app.include_router(planning_router)
+app.include_router(pipeline_router)
 
 @app.get("/")
 async def root():

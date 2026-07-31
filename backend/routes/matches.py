@@ -101,3 +101,17 @@ async def delete_match(match_id: int):
     if not deleted:
         raise HTTPException(status_code=404, detail=f"Match with id {match_id} not found")
     return {"status": "deleted", "id": match_id}
+
+
+class MatchGrantsRequest(BaseModel):
+    researcher: dict
+    grants: List[dict]
+
+
+@router.post("/score")
+async def score_grants_endpoint(payload: MatchGrantsRequest):
+    """
+    Run AI matching agent for a given researcher profile and list of grants.
+    """
+    matches = run_matching_agent(payload.researcher, payload.grants)
+    return {"status": "success", "matches": matches}
