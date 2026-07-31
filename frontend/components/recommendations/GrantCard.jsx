@@ -1,4 +1,5 @@
 // GrantCard.jsx — Premium glassmorphism grant card
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import MatchScore from './MatchScore.jsx'
 
@@ -25,6 +26,7 @@ function Tag({ label }) {
 }
 
 export default function GrantCard({ grant, index }) {
+  const navigate = useNavigate()
   const {
     id,
     title,
@@ -142,6 +144,7 @@ export default function GrantCard({ grant, index }) {
         {/* View details button */}
         <button
           id={`grant-view-${id}`}
+          onClick={() => navigate('/grant-details')}
           className="w-full py-2.5 rounded-xl text-xs font-semibold bg-white/[0.05] border border-white/10 text-white/60 hover:bg-brand-600/80 hover:border-brand-500/60 hover:text-white transition-all duration-200 group-hover:shadow-lg"
         >
           View Details →

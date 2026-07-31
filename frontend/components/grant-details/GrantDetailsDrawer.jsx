@@ -1,5 +1,6 @@
 // GrantDetailsDrawer.jsx — Slide-in drawer composing all sections
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
 import CloseButton          from './CloseButton.jsx'
@@ -24,6 +25,8 @@ const backdropVariants = {
 }
 
 export default function GrantDetailsDrawer({ grant, onClose }) {
+  const navigate = useNavigate()
+
   /* Lock body scroll while drawer is open */
   useEffect(() => {
     document.body.style.overflow = 'hidden'
@@ -117,6 +120,10 @@ export default function GrantDetailsDrawer({ grant, onClose }) {
           <div className="relative z-10 flex-shrink-0 px-5 py-4 border-t border-white/[0.07] bg-surface-900/80 backdrop-blur-md flex gap-3">
             <motion.button
               id="drawer-apply"
+              onClick={() => {
+                if (onClose) onClose()
+                navigate('/grant-details')
+              }}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               className="flex-1 py-3 rounded-xl text-sm font-semibold bg-brand-600 hover:bg-brand-500 text-white transition-colors duration-200 shadow-lg"

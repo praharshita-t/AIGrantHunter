@@ -1,5 +1,6 @@
 // GrantDetails.jsx — Grant Details page matching backend planning response with Compliance Checklist & Outreach Email
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import GrantDetailsDrawer from '../components/grant-details/GrantDetailsDrawer.jsx'
 
@@ -282,6 +283,7 @@ function OutreachEmailSection({ email }) {
 
 // ─── Main Page Component ──────────────────────────────────────────────────────
 export default function GrantDetails() {
+  const navigate = useNavigate()
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   return (

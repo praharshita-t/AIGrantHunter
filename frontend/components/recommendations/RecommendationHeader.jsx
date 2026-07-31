@@ -1,4 +1,5 @@
 // RecommendationHeader.jsx — Page title, subtitle and live run stats
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 const STATS = [
@@ -9,6 +10,8 @@ const STATS = [
 ]
 
 export default function RecommendationHeader({ total = 6 }) {
+  const navigate = useNavigate()
+
   return (
     <div className="mb-10">
       {/* Breadcrumb */}
@@ -18,9 +21,11 @@ export default function RecommendationHeader({ total = 6 }) {
         transition={{ duration: 0.4 }}
         className="flex items-center gap-2 text-[11px] font-mono text-white/25 mb-6"
       >
-        <span>GrantAI</span><span>/</span>
-        <span className="text-white/40">mission-control</span><span>/</span>
-        <span className="text-brand-400">recommendations</span>
+        <span onClick={() => navigate('/')} className="hover:text-white cursor-pointer transition-colors">GrantAI</span>
+        <span>/</span>
+        <span onClick={() => navigate('/mission-control')} className="text-white/40 hover:text-white cursor-pointer transition-colors">mission-control</span>
+        <span>/</span>
+        <span onClick={() => navigate('/recommendations')} className="text-brand-400 cursor-pointer">recommendations</span>
       </motion.div>
 
       {/* Title row */}

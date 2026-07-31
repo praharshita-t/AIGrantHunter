@@ -1,5 +1,6 @@
 // ResearchProfile.jsx — Research Profile Upload page
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
 import UploadZone                from '../components/profile/UploadZone.jsx'
@@ -42,6 +43,7 @@ function SectionLabel({ step, children }) {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function ResearchProfile() {
+  const navigate = useNavigate()
   const [form, setForm] = useState(INITIAL)
   const [showManual, setShowManual] = useState(false)
 
@@ -61,6 +63,7 @@ export default function ResearchProfile() {
     console.log('Funding types:',  form.fundingTypes)
     console.log('Funding range:',  form.fundingRange)
     console.groupEnd()
+    navigate('/mission-control')
   }
 
   return (
@@ -82,8 +85,9 @@ export default function ResearchProfile() {
         >
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-[11px] font-mono text-white/25 mb-5">
-            <span>GrantAI</span><span>/</span>
-            <span className="text-brand-400">research-profile</span>
+            <span onClick={() => navigate('/')} className="hover:text-white cursor-pointer transition-colors">GrantAI</span>
+            <span>/</span>
+            <span onClick={() => navigate('/profile')} className="text-brand-400 cursor-pointer">research-profile</span>
           </div>
 
           <span className="text-xs font-semibold tracking-widest text-brand-400 uppercase">

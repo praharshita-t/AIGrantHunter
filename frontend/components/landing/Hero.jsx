@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 const fadeUp = {
@@ -10,6 +11,8 @@ const fadeUp = {
 }
 
 export default function Hero() {
+  const navigate = useNavigate()
+
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-24 pb-16 overflow-hidden">
       {/* Ambient glow blobs */}
@@ -70,6 +73,7 @@ export default function Hero() {
       >
         <button
           id="hero-find-grants"
+          onClick={() => navigate('/recommendations')}
           className="group relative px-8 py-3.5 rounded-xl font-semibold text-sm bg-brand-600 hover:bg-brand-500 text-white transition-all duration-200 glow-brand hover:scale-[1.03] active:scale-[0.98]"
         >
           <span className="relative z-10">Find Grants</span>
@@ -79,6 +83,7 @@ export default function Hero() {
 
         <button
           id="hero-upload-profile"
+          onClick={() => navigate('/profile')}
           className="px-8 py-3.5 rounded-xl font-semibold text-sm glass text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200 hover:scale-[1.03] active:scale-[0.98]"
         >
           Upload Research Profile

@@ -1,5 +1,6 @@
 // MissionHeader.jsx — Top header with live system clock and OS-style metadata
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 function LiveClock() {
@@ -27,6 +28,8 @@ const PILLS = [
 ]
 
 export default function MissionHeader() {
+  const navigate = useNavigate()
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -16 }}
@@ -38,9 +41,9 @@ export default function MissionHeader() {
       <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
         {/* Left: breadcrumb */}
         <div className="flex items-center gap-2 text-[11px] font-mono text-white/25">
-          <span>GrantAI</span>
+          <span onClick={() => navigate('/')} className="hover:text-white cursor-pointer transition-colors">GrantAI</span>
           <span>/</span>
-          <span className="text-white/45">mission-control</span>
+          <span onClick={() => navigate('/mission-control')} className="text-white/45 hover:text-white cursor-pointer transition-colors">mission-control</span>
           <span>/</span>
           <span className="text-brand-400">session-001</span>
         </div>
@@ -67,7 +70,8 @@ export default function MissionHeader() {
             initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="inline-flex items-center gap-2 mb-3"
+            className="inline-flex items-center gap-2 mb-3 cursor-pointer"
+            onClick={() => navigate('/')}
           >
             <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
               <span className="text-[10px] font-bold text-white">G</span>

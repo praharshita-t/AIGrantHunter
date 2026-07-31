@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 
 const TESTIMONIALS = [
@@ -23,6 +24,7 @@ const TESTIMONIALS = [
 ]
 
 export default function CTASection() {
+  const navigate = useNavigate()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-60px' })
 
@@ -100,6 +102,7 @@ export default function CTASection() {
             <div className="mt-10 flex flex-col sm:flex-row gap-4 items-center">
               <button
                 id="cta-get-started"
+                onClick={() => navigate('/profile')}
                 className="group px-10 py-4 rounded-xl font-semibold text-sm bg-brand-600 hover:bg-brand-500 text-white transition-all duration-200 glow-brand hover:scale-[1.04] active:scale-[0.98]"
               >
                 Get started for free
@@ -107,6 +110,7 @@ export default function CTASection() {
               </button>
               <button
                 id="cta-view-demo"
+                onClick={() => navigate('/mission-control')}
                 className="px-10 py-4 rounded-xl font-semibold text-sm glass text-white/70 hover:text-white hover:bg-white/10 transition-all duration-200"
               >
                 View demo
