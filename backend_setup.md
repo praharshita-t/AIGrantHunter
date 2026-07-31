@@ -1,14 +1,13 @@
-# AI Grant Opportunity Hunter - Backend Setup & Gemini Integration
+# AI Grant Opportunity Hunter - Backend Setup & Featherless.ai Integration
 
-This document outlines what has been done in the backend, how to set up the Google Gemini API key, and how to verify and run the API server.
+This document outlines what has been done in the backend, how to set up the Featherless.ai API key, and how to verify and run the API server.
 
 ---
 
 ## 🛠️ What has been done in the Backend
 
-1. **Centralized Gemini Integration**:
-   * Refactored `grok_client.py` to route all LLM requests through Google's OpenAI-compatible gateway using **`gemini-3.1-flash-lite`**.
-   * Bypassed the daily free-tier quota limits of other models by selecting `gemini-3.1-flash-lite`, which is fully active and supported.
+1. **Centralized Featherless.ai Integration**:
+   * Refactored `featherless_client.py` to route all LLM requests through Featherless.ai's OpenAI-compatible gateway using **`Qwen/Qwen2.5-14B-Instruct`**.
 2. **Safe Grant Matching & Scoring**:
    * Fixed `KeyError` crashes in `scorer.py` by converting direct key accesses (like `grant["country"]` and `grant["funding"]`) to safe dictionary lookups (`.get()`) with default fallbacks.
    * This allows the matching agent to process raw scraped grants (from NSF, ANRF, or UKRI) before they go through the extraction agent.
@@ -16,21 +15,21 @@ This document outlines what has been done in the backend, how to set up the Goog
    * **`GET /api/grants/discover`**: Scrapes and lists active opportunities from NSF, ANRF, and UKRI.
    * **`POST /api/matches`**: Computes semantic similarity and priority scores on keyword matching.
    * **`POST /api/planning`**: Generates compliance checklists, urgency analysis, and personalized outreach emails.
-   * **`POST /api/ai/test`**: Simple connection test to verify that the Gemini API is responding.
+   * **`POST /api/ai/test`**: Simple connection test to verify that the Featherless.ai API is responding.
 
 ---
 
-## 🔑 How to Setup Gemini API
+## 🔑 How to Setup Featherless.ai API
 
-To run the AI agents locally, you need to configure your Google AI Studio key:
+To run the AI agents locally, you need to configure your Featherless.ai API key:
 
-1. Go to [Google AI Studio](https://aistudio.google.com/) and generate a free API key.
+1. Go to [Featherless.ai](https://featherless.ai/) and generate an API key.
 2. Open the `.env` file at the root of the project.
-3. Replace the existing key value on **line 2** with your Gemini key:
+3. Replace the existing key value on **line 2** with your Featherless key:
    ```env
-   GROK_API_KEY=AIzaSyYourGeminiKeyHere
+   GROK_API_KEY=fl_YourFeatherlessKeyHere
    ```
-   *(Note: The codebase internally references the environment variable name `GROK_API_KEY`, but the client is configured to route directly to Google's Gemini servers).*
+   *(Note: The codebase internally references the environment variable name `GROK_API_KEY`, but the client is configured to route directly to Featherless.ai).*
 
 ---
 
@@ -72,11 +71,11 @@ The server will start running locally at: `http://127.0.0.1:8000`
 Open `http://127.0.0.1:8000/docs` in your browser to access the interactive API docs. Here is what to send to test the endpoints:
 
 ### Endpoint 1: `POST /api/ai/test`
-* **Purpose**: Verifies that your Gemini API key is active.
+* **Purpose**: Verifies that your Featherless.ai API key is active.
 * **Payload**:
   ```json
   {
-    "prompt": "Hello Gemini!"
+    "prompt": "Hello Llama!"
   }
   ```
 

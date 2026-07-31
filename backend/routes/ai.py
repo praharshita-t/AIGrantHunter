@@ -15,7 +15,7 @@ class TestPromptRequest(BaseModel):
 @router.post("/test")
 async def test_ai_endpoint(payload: TestPromptRequest):
     """
-    Test endpoint to verify that Grok API integration is active and working.
+    Test endpoint to verify that Featherless API integration is active and working.
     """
     response_text = ai_service.generate(prompt=payload.prompt)
     
@@ -23,7 +23,7 @@ async def test_ai_endpoint(payload: TestPromptRequest):
         raise HTTPException(
             status_code=500,
             detail=(
-                "Failed to generate response from Grok. Please verify that a valid GROK_API_KEY "
+                "Failed to generate response from Featherless. Please verify that a valid GROK_API_KEY "
                 "is set in your local .env file, and that your account has active credits."
             )
         )
