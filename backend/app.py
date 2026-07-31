@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import sys
 import os
 
@@ -7,6 +8,10 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from routes.ai import router as ai_router
+from routes.grants import router as grants_router
+from routes.researchers import router as researchers_router
+from routes.matches import router as matches_router
+from routes.notifications import router as notifications_router
 
 app = FastAPI(
     title="AI Grant Opportunity Hunter Backend",
@@ -14,8 +19,21 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# CORS middleware for frontend communication
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Register routers
 app.include_router(ai_router)
+app.include_router(grants_router)
+app.include_router(researchers_router)
+app.include_router(matches_router)
+app.include_router(notifications_router)
 
 @app.get("/")
 async def root():
