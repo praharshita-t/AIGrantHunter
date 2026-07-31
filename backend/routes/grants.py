@@ -4,15 +4,17 @@ routes/grants.py
 CRUD and Discovery API endpoints for grant management.
 """
 
-from fastapi import APIRouter, HTTPException
-from typing import List
-import sys
 import os
+import sys
+from typing import List
+from fastapi import APIRouter, HTTPException
 
-# Ensure backend directory is in search path
+# Ensure backend and root directory are in search path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import database
-from schemas.grant import GrantCreate, GrantUpdate, GrantResponse
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
+from backend import database
+from backend.schemas.grant import GrantCreate, GrantUpdate, GrantResponse
 from agents.grant_agent.service import run_grant_discovery
 
 router = APIRouter(prefix="/api/grants", tags=["Grants"])

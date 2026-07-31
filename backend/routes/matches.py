@@ -4,16 +4,18 @@ routes/matches.py
 API endpoints for grant-researcher match management and AI matching service.
 """
 
+import os
+import sys
+from typing import Any, Dict, List
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import List, Union, Any, Dict
-import sys
-import os
 
-# Ensure backend directory is in search path
+# Ensure backend and root directory are in search path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import database
-from schemas.match import MatchCreate, MatchResponse
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
+from backend import database
+from backend.schemas.match import MatchCreate, MatchResponse
 from agents.matching_agent.service import run_matching_agent
 from agents.grant_agent.service import run_grant_discovery
 

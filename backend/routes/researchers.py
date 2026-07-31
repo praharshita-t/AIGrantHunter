@@ -4,15 +4,17 @@ routes/researchers.py
 CRUD API endpoints for researcher management.
 """
 
-from fastapi import APIRouter, HTTPException
-from typing import List
-import sys
 import os
+import sys
+from typing import List
+from fastapi import APIRouter, HTTPException
 
-# Ensure backend directory is in search path
+# Ensure backend and root directory are in search path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import database
-from schemas.researcher import ResearcherCreate, ResearcherUpdate, ResearcherResponse
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
+from backend import database
+from backend.schemas.researcher import ResearcherCreate, ResearcherUpdate, ResearcherResponse
 
 router = APIRouter(prefix="/api/researchers", tags=["Researchers"])
 

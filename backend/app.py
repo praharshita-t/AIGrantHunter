@@ -4,11 +4,11 @@ from fastapi.middleware.cors import CORSMiddleware
 import sys
 import os
 
-# Ensure backend directory is in search path
+# Ensure backend and root directories are in search path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from routes import (
+from backend.routes import (
     ai_router,
     grants_router,
     researchers_router,

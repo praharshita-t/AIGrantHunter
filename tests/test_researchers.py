@@ -4,15 +4,16 @@ tests/test_researchers.py
 Unit tests for the researcher CRUD endpoints.
 """
 
+import os
+import sys
 import pytest
 from fastapi.testclient import TestClient
-import sys
-import os
 
-# Ensure backend is on path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "backend")))
-from app import app
-import database
+# Ensure workspace root is in sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from backend.app import app
+from backend import database
 
 
 @pytest.fixture(autouse=True)

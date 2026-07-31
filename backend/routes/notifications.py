@@ -4,15 +4,17 @@ routes/notifications.py
 API endpoints for notification management.
 """
 
-from fastapi import APIRouter, HTTPException
-from typing import List
-import sys
 import os
+import sys
+from typing import List
+from fastapi import APIRouter, HTTPException
 
-# Ensure backend directory is in search path
+# Ensure backend and root directory are in search path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import database
-from schemas.notification import NotificationCreate, NotificationResponse
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
+from backend import database
+from backend.schemas.notification import NotificationCreate, NotificationResponse
 
 router = APIRouter(prefix="/api/notifications", tags=["Notifications"])
 
