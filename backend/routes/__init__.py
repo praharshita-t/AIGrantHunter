@@ -7,6 +7,7 @@ from .grants import router as grants_router
 from .researchers import router as researchers_router
 from .matches import router as matches_router
 from .notifications import router as notifications_router
+from .planning import router as planning_router
 
 __all__ = [
     "ai_router",
@@ -14,4 +15,5 @@ __all__ = [
     "researchers_router",
     "matches_router",
     "notifications_router",
+    "planning_router",
 ]

@@ -6,6 +6,7 @@ import os
 
 # Ensure backend directory is in search path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from routes import (
     ai_router,
@@ -13,6 +14,7 @@ from routes import (
     researchers_router,
     matches_router,
     notifications_router,
+    planning_router,
 )
 
 app = FastAPI(
@@ -30,12 +32,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register routers
+# Register all routes
 app.include_router(ai_router)
 app.include_router(grants_router)
 app.include_router(researchers_router)
 app.include_router(matches_router)
 app.include_router(notifications_router)
+app.include_router(planning_router)
 
 @app.get("/")
 async def root():

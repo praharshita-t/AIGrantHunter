@@ -40,7 +40,7 @@ def calculate_priority_score(
 
     # ---------- Deadline ----------
     try:
-        deadline_date = datetime.strptime(grant["deadline"], "%Y-%m-%d")
+        deadline_date = datetime.strptime(grant.get("deadline") or "2026-10-15", "%Y-%m-%d")
         days_left = (deadline_date - datetime.today()).days
     except (ValueError, KeyError, TypeError):
         days_left = 30
@@ -59,13 +59,13 @@ def calculate_priority_score(
     # ---------- Preferred Country ----------
     country_score = (
         100
-        if grant["country"] in profile.get("preferred_countries", [])
+        if grant.get("country", "") in profile.get("preferred_countries", [])
         else 0
     )
 
     # ---------- Funding ----------
     try:
-        amount = int(re.sub(r"[^\d]", "", grant["funding"]))
+        amount = int(re.sub(r"[^\d]", "", grant.get("funding") or "0"))
     except (ValueError, KeyError, TypeError):
         amount = 0
 
@@ -111,12 +111,12 @@ def explain_match(profile: dict, grant: dict, days_left: int) -> list[str]:
             reasons.append(
                 "No direct research area overlap. Recommendation based on semantic similarity."
             )
-        if grant["country"] in profile.get("preferred_countries", []):
+        if grant.get("country", "") in profile.get("preferred_countries", []):
             reasons.append(
-                f"Available in your preferred funding region ({grant['country']})."
+                f"Available in your preferred funding region ({grant.get('country', 'Not Available')})."
             )
         reasons.append(
-            f"Grant offers funding of {grant['funding']}."
+            f"Grant offers funding of {grant.get('funding', 'Not Available')}."
         )
         if days_left <= 7:
             reasons.append("Deadline is within one week. Apply soon!")
@@ -151,12 +151,12 @@ def explain_match(profile: dict, grant: dict, days_left: int) -> list[str]:
                 f"- Publications: {', '.join(profile.get('publications', []))}\n"
                 f"- Career Stage: {profile.get('career_stage', 'Unknown')}\n\n"
                 f"Grant Details:\n"
-                f"- Title: {grant.get('title')}\n"
-                f"- Agency: {grant.get('agency')}\n"
-                f"- Country: {grant.get('country')}\n"
-                f"- Funding: {grant.get('funding')}\n"
-                f"- Deadline: {grant.get('deadline')} ({days_left} days remaining)\n"
-                f"- Research Areas: {', '.join(grant.get('research_areas', []))}"
+                f"- Title: {grant.get('title', 'Not Available')}\n"
+                f"- Agency: {grant.get('agency', 'Not Available')}\n"
+                f"- Country: {grant.get('country', 'Not Available')}\n"
+                f"- Funding: {grant.get('funding', 'Not Available')}\n"
+                f"- Deadline: {grant.get('deadline', 'Not Available')} ({days_left} days remaining)\n"
+                f"- Research Areas: {', '.join(grant.get('research_areas') or [])}"
             )
         }
     ]
@@ -213,11 +213,11 @@ def score_grant(
     )
 
     return {
-        "title": grant["title"],
-        "agency": grant["agency"],
-        "country": grant["country"],
-        "funding": grant["funding"],
-        "deadline": grant["deadline"],
+        "title": grant.get("title", "Not Available"),
+        "agency": grant.get("agency", "Not Available"),
+        "country": grant.get("country", "Not Available"),
+        "funding": grant.get("funding", "Not Available"),
+        "deadline": grant.get("deadline", "Not Available"),
 
         "match_score": match_score,
         "priority_score": priority_score,

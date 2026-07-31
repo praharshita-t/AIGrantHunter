@@ -8,8 +8,8 @@ load_dotenv(".env.local")
 load_dotenv(".env")
 
 # Standard xAI API Endpoints & Default Models
-XAI_BASE_URL = "https://api.x.ai/v1"
-XAI_DEFAULT_MODEL = "grok-2"
+XAI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+XAI_DEFAULT_MODEL = "gemini-3.1-flash-lite"
 
 def get_grok_client():
     """

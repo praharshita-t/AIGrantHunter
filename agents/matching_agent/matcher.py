@@ -1,35 +1,63 @@
-from embeddings import generate_embedding, similarity_score
+from .embeddings import generate_embedding, similarity_score
 
 
 def build_profile_text(profile):
     """
     Convert researcher profile into one text block.
+    Supports both:
+    1. Full researcher profile
+    2. Simple keywords list
     """
 
+    # If frontend only sends keywords
+    if "keywords" in profile:
+        keywords = ", ".join(profile["keywords"])
+
+        return f"""
+        Research Areas: {keywords}
+
+        Skills: {keywords}
+
+        Publications:
+
+        Career Stage: Student
+        """
+
+    # Full profile
     return f"""
-    Research Areas: {', '.join(profile['research_areas'])}
+    Research Areas: {', '.join(profile.get('research_areas', []))}
 
-    Skills: {', '.join(profile['skills'])}
+    Skills: {', '.join(profile.get('skills', []))}
 
-    Publications: {', '.join(profile['publications'])}
+    Publications: {', '.join(profile.get('publications', []))}
 
-    Career Stage: {profile['career_stage']}
+    Career Stage: {profile.get('career_stage', 'Student')}
     """
 
 
 def build_grant_text(grant):
     """
     Convert grant information into one text block.
+    Handles missing fields gracefully.
     """
 
+    title = grant.get("title", "")
+    agency = grant.get("agency", "")
+    country = grant.get("country", "")
+    research_areas = grant.get("research_areas", [])
+
+    # Fallback: use title if research areas aren't available
+    if not research_areas:
+        research_areas = [title]
+
     return f"""
-    Title: {grant['title']}
+    Title: {title}
 
-    Research Areas: {', '.join(grant['research_areas'])}
+    Research Areas: {', '.join(research_areas)}
 
-    Agency: {grant['agency']}
+    Agency: {agency}
 
-    Country: {grant['country']}
+    Country: {country}
     """
 
 
