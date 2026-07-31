@@ -43,7 +43,7 @@ const MOCK_GRANTS = [
     category: 'Government',
     tags: ['Climate Science', 'Remote Sensing', 'Data Analytics'],
     aiReason:
-      'Recommended because your remote sensing and satellite data analytics background directly addresses the fund's core research mandate on climate modelling.',
+      'Recommended because your remote sensing and satellite data analytics background directly addresses the fund’s core research mandate on climate modelling.',
   },
   {
     id: 'ukri-ai-2024',
@@ -83,6 +83,115 @@ const MOCK_GRANTS = [
   },
 ]
 
+// ─── Enriched data: whyMatched + priority added to each grant ─────────────────
+const ENRICHED_GRANTS = [
+  {
+    ...MOCK_GRANTS[0],
+    whyMatched:
+      'Your 12 publications in computational genomics and ML-based protein structure prediction directly satisfy NSF’s stated priority on AI-driven biological integration. Institutional eligibility confirmed. Keyword overlap score: 96%.',
+    priority: 'High',
+  },
+  {
+    ...MOCK_GRANTS[1],
+    whyMatched:
+      'Brain imaging AI is the core focus of this award, matching your three most-cited papers. Your career stage (early-career researcher) satisfies the eligibility window for the Discovery Award. Grant history: 0 disqualifying conflicts.',
+    priority: 'High',
+  },
+  {
+    ...MOCK_GRANTS[2],
+    whyMatched:
+      'Your remote sensing datasets and climate modelling collaborations align with ANRF’s sustainability mandate. Strong geographical eligibility as an Indian-affiliated institution researcher. Keyword overlap score: 88%.',
+    priority: 'High',
+  },
+  {
+    ...MOCK_GRANTS[3],
+    whyMatched:
+      'UKRI’s accelerator explicitly targets AI applied to drug discovery and life sciences — both active threads in your publication record. Moderate overlap with industrial application requirements. Keyword overlap score: 85%.',
+    priority: 'Medium',
+  },
+  {
+    ...MOCK_GRANTS[4],
+    whyMatched:
+      'Moderate match — your simulation work overlaps with Digital Twins, but the industrial IoT component is less represented in your profile. Strong fit for the industry co-funding structure with your existing ANRF collaboration.',
+    priority: 'Medium',
+  },
+  {
+    ...MOCK_GRANTS[5],
+    whyMatched:
+      'Stretch application with high upside. Citation h-index meets the minimum threshold. Multidisciplinary scope gives your diverse research portfolio an advantage over narrower applicants. Keyword overlap score: 74%.',
+    priority: 'Low',
+  },
+]
+
+// ─── Priority badge styles ────────────────────────────────────────────────────
+const PRIORITY_CONFIG = {
+  High:   { bg: 'bg-emerald-500/12', border: 'border-emerald-500/25', text: 'text-emerald-300', dot: 'bg-emerald-400', label: 'High Priority'   },
+  Medium: { bg: 'bg-amber-500/12',   border: 'border-amber-500/25',   text: 'text-amber-300',   dot: 'bg-amber-400',   label: 'Medium Priority' },
+  Low:    { bg: 'bg-white/[0.04]',   border: 'border-white/8',         text: 'text-white/35',    dot: 'bg-white/25',    label: 'Low Priority'    },
+}
+
+// ─── Enriched card wrapper ────────────────────────────────────────────────────
+// Wraps GrantCard with a priority+match header bar on top and
+// a "Why Matched" explanation strip on the bottom.
+function EnrichedGrantCard({ grant, index }) {
+  const { priority, whyMatched, matchScore } = grant
+  const pc = PRIORITY_CONFIG[priority] ?? PRIORITY_CONFIG.Low
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 36, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.55, delay: index * 0.09, ease: [0.22, 1, 0.36, 1] }}
+      className="flex flex-col"
+    >
+      {/* ── Priority + Match Score header bar ────────────────────────────── */}
+      <div
+        className={`flex items-center justify-between px-4 py-2 rounded-t-2xl border-t border-x ${pc.border} ${pc.bg}`}
+      >
+        {/* Priority indicator */}
+        <div className="flex items-center gap-2">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${pc.dot} opacity-60`} />
+            <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${pc.dot}`} />
+          </span>
+          <span className={`text-[10px] font-bold uppercase tracking-widest ${pc.text}`}>
+            {pc.label}
+          </span>
+        </div>
+
+        {/* Match score pill */}
+        <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/[0.05] border border-white/10">
+          <span className="text-[10px] text-white/25 font-medium">AI Match</span>
+          <span
+            className={`text-xs font-extrabold tabular-nums ${
+              matchScore >= 90 ? 'text-emerald-400' :
+              matchScore >= 75 ? 'text-blue-400'    :
+              'text-amber-400'
+            }`}
+          >
+            {matchScore}%
+          </span>
+        </div>
+      </div>
+
+      {/* ── GrantCard — rendered with top corners removed ────────────────── */}
+      <div className="[&>article]:rounded-t-none [&>article]:border-t-0">
+        <GrantCard grant={grant} index={0} />
+      </div>
+
+      {/* ── Why Matched strip ─────────────────────────────────────────────── */}
+      <div className="px-4 py-3 rounded-b-2xl bg-white/[0.02] border-b border-x border-white/[0.06]">
+        <div className="flex items-start gap-2">
+          <span className="flex-shrink-0 mt-0.5 text-[9px] font-extrabold tracking-widest text-brand-400 uppercase">
+            Why
+          </span>
+          <p className="text-[11px] text-white/45 leading-relaxed">{whyMatched}</p>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 // ─── Section divider ─────────────────────────────────────────────────────────
 function SectionDivider() {
   return (
@@ -98,7 +207,7 @@ export default function Recommendations() {
   const [query,        setQuery]        = useState('')
 
   const filtered = useMemo(() => {
-    let list = MOCK_GRANTS
+    let list = ENRICHED_GRANTS
     if (activeFilter !== 'All') {
       list = list.filter((g) => g.category === activeFilter)
     }
@@ -125,7 +234,7 @@ export default function Recommendations() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
-        <RecommendationHeader total={MOCK_GRANTS.length} />
+        <RecommendationHeader total={ENRICHED_GRANTS.length} />
 
         <SectionDivider />
 
@@ -150,7 +259,7 @@ export default function Recommendations() {
               className="text-xs text-white/25 mb-6 font-medium"
             >
               Showing <span className="text-white/50">{filtered.length}</span> of{' '}
-              <span className="text-white/50">{MOCK_GRANTS.length}</span> grants
+              <span className="text-white/50">{ENRICHED_GRANTS.length}</span> grants
               {activeFilter !== 'All' && (
                 <> · <span className="text-brand-400">{activeFilter}</span></>
               )}
@@ -173,7 +282,7 @@ export default function Recommendations() {
               className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5"
             >
               {filtered.map((grant, i) => (
-                <GrantCard key={grant.id} grant={grant} index={i} />
+                <EnrichedGrantCard key={grant.id} grant={grant} index={i} />
               ))}
             </motion.div>
           ) : (
