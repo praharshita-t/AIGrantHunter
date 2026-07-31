@@ -9,9 +9,9 @@ To add another agency:
 
 No other files need modification.
 """
-from nsf import scrape_nsf
-from anrf import scrape_anrf
-from ukri import scrape_ukri
+from .nsf import scrape_nsf
+from .anrf import scrape_anrf
+from .ukri import scrape_ukri
 
 
 def scrape_website(website):

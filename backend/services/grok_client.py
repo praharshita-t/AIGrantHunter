@@ -9,7 +9,7 @@ load_dotenv(".env")
 
 # Standard xAI API Endpoints & Default Models
 XAI_BASE_URL = "https://api.x.ai/v1"
-XAI_DEFAULT_MODEL = "grok-2"
+XAI_DEFAULT_MODEL = "grok-4.5"
 
 def get_grok_client():
     """

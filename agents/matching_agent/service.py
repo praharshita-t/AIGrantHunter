@@ -1,17 +1,16 @@
-from sample_data import researcher, grants
-from matcher import match_grants
-from scorer import score_grant
+
+from .matcher import match_grants
+from .scorer import score_grant
 
 
-def get_recommendations() -> list:
-    """
-    Generate ranked grant recommendations.
-    """
+def run_matching_agent(researcher: dict, grants: list):
+
     matches = match_grants(researcher, grants)
 
     recommendations = []
 
     for match in matches:
+
         recommendations.append(
             score_grant(
                 researcher,
@@ -20,9 +19,8 @@ def get_recommendations() -> list:
             )
         )
 
-    # Sort by overall priority
     recommendations.sort(
-        key=lambda recommendation: recommendation["priority_score"],
+        key=lambda x: x["priority_score"],
         reverse=True
     )
 
@@ -53,6 +51,3 @@ def display_recommendations(results: list) -> None:
         print("=" * 55)
 
 
-if __name__ == "__main__":
-    recommendations = get_recommendations()
-    display_recommendations(recommendations)
