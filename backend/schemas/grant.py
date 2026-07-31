@@ -4,20 +4,20 @@ schemas/grant.py
 Pydantic request/response schemas for grant endpoints.
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing import List, Optional
 
 
 class GrantCreate(BaseModel):
-    title: str = Field(..., example="AI for Healthcare")
-    agency: str = Field(..., example="NSF")
-    country: str = Field(..., example="USA")
-    funding: str = Field(..., example="$100,000")
-    deadline: str = Field(..., example="2026-09-30")
-    research_areas: List[str] = Field(default_factory=list, example=["AI", "Healthcare"])
-    required_documents: List[str] = Field(default_factory=list, example=["Proposal", "Budget", "CV"])
-    description: Optional[str] = Field(None, example="Grant supporting AI research in healthcare")
-    source_url: Optional[str] = Field(None, example="https://nsf.gov/grants/ai-healthcare")
+    title: str = Field(..., json_schema_extra={"example": "AI for Healthcare"})
+    agency: str = Field(..., json_schema_extra={"example": "NSF"})
+    country: str = Field(..., json_schema_extra={"example": "USA"})
+    funding: str = Field(..., json_schema_extra={"example": "$100,000"})
+    deadline: str = Field(..., json_schema_extra={"example": "2026-09-30"})
+    research_areas: List[str] = Field(default_factory=list)
+    required_documents: List[str] = Field(default_factory=list)
+    description: Optional[str] = None
+    source_url: Optional[str] = None
 
 
 class GrantUpdate(BaseModel):
@@ -33,6 +33,8 @@ class GrantUpdate(BaseModel):
 
 
 class GrantResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     title: str
     agency: str
@@ -43,6 +45,3 @@ class GrantResponse(BaseModel):
     required_documents: List[str]
     description: Optional[str] = None
     source_url: Optional[str] = None
-
-    class Config:
-        from_attributes = True

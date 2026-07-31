@@ -4,13 +4,8 @@ tests/test_researchers.py
 Unit tests for the researcher CRUD endpoints.
 """
 
-import os
-import sys
 import pytest
 from fastapi.testclient import TestClient
-
-# Ensure workspace root is in sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from backend.app import app
 from backend import database
@@ -73,7 +68,7 @@ def test_update_researcher():
     response = client.put("/api/researchers/1", json={"name": "Dr. Priya S."})
     assert response.status_code == 200
     assert response.json()["name"] == "Dr. Priya S."
-    assert response.json()["institution"] == "IIT Madras"  # unchanged
+    assert response.json()["institution"] == "IIT Madras"
 
 
 def test_delete_researcher():
@@ -82,6 +77,5 @@ def test_delete_researcher():
     assert response.status_code == 200
     assert response.json()["status"] == "deleted"
 
-    # Verify it's gone
     response = client.get("/api/researchers/1")
     assert response.status_code == 404

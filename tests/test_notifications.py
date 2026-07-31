@@ -4,13 +4,8 @@ tests/test_notifications.py
 Unit tests for the notification endpoints.
 """
 
-import os
-import sys
 import pytest
 from fastapi.testclient import TestClient
-
-# Ensure workspace root is in sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from backend.app import app
 from backend import database

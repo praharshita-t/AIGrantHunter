@@ -4,13 +4,8 @@ tests/test_grants.py
 Unit tests for the grant CRUD endpoints.
 """
 
-import os
-import sys
 import pytest
 from fastapi.testclient import TestClient
-
-# Ensure workspace root is in sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from backend.app import app
 from backend import database
@@ -74,7 +69,7 @@ def test_update_grant():
     response = client.put("/api/grants/1", json={"funding": "$200,000"})
     assert response.status_code == 200
     assert response.json()["funding"] == "$200,000"
-    assert response.json()["title"] == "AI for Healthcare"  # unchanged
+    assert response.json()["title"] == "AI for Healthcare"
 
 
 def test_delete_grant():
@@ -83,6 +78,5 @@ def test_delete_grant():
     assert response.status_code == 200
     assert response.json()["status"] == "deleted"
 
-    # Verify it's gone
     response = client.get("/api/grants/1")
     assert response.status_code == 404

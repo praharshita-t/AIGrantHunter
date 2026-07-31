@@ -1,11 +1,12 @@
+import os
+import sys
 from fastapi import APIRouter
 from pydantic import BaseModel
-import sys
-import os
-from agents.planning_agent.service import run_planning_agent
+
+# Ensure project root is in path for agent imports
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-
+from agents.planning_agent.service import run_planning_agent
 
 router = APIRouter(
     prefix="/api/planning",
@@ -19,9 +20,5 @@ class PlanningRequest(BaseModel):
 
 @router.post("/")
 async def planning(payload: PlanningRequest):
-
-    result = run_planning_agent(
-        payload.grant
-    )
-
+    result = run_planning_agent(payload.grant)
     return result
